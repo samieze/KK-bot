@@ -33,8 +33,8 @@ public class login_get {
 		String token = extract_token_value(establish_connection());
 		
 		CookieHandler.setDefault(new CookieManager());
-		//token = URLEncoder.encode(token, "UTF-8");
-		String postParams = "utf8=%E2%9C%93&authenticity_token="+token+"&login=discodisko&password=Mopsovic1&commit=Los+geht's!";
+		String token_urlencoded = URLEncoder.encode(token, "UTF-8");
+		String postParams = "utf8=%E2%9C%93&authenticity_token="+token_urlencoded+"&login=samieze&password=Apfelstrudel1!&commit=Los+geht's!";
 		
 		sendPost(url,postParams,token);
 	}
