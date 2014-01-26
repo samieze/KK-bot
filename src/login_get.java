@@ -22,25 +22,23 @@ import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
-//
 public class login_get {
-
+	private static final boolean USE_FIDDLER = false;
 	private static HttpsURLConnection conn;
 	private static List <String> cookies= new ArrayList<String>();
 	static String url = "https://www.kleiderkreisel.de/member/general/login.json?ref_url=%2F";
 
 
 	public static void main(String[] args) throws Exception {
-		//fuer https debugging - leitet alle https anfragen durch https proxy auf port 8888 (fiddler). FIXME: erwartet das file FiddlerKeystore in C:\
-		Properties sysProperties = System.getProperties(); sysProperties.put("https.proxyHost", "127.0.0.1"); sysProperties.put("https.proxyPort", "8888"); sysProperties.put("http.proxyHost", "127.0.0.1"); sysProperties.put("http.proxyPort", "8889"); sysProperties.put("javax.net.ssl.trustStore","C:\\FiddlerKeystore"); sysProperties.put("javax.net.ssl.trustStorePassword","1111111");
-
+		if (USE_FIDDLER){ //Fiddler (http://www.telerik.com/fiddler) = HTTP Proxy der einen man in the middle angriff auf die TLS verbindung browser-webserver fährt...)
+			Properties sysProperties = System.getProperties(); sysProperties.put("https.proxyHost", "127.0.0.1"); sysProperties.put("https.proxyPort", "8888"); sysProperties.put("http.proxyHost", "127.0.0.1"); sysProperties.put("http.proxyPort", "8889"); sysProperties.put("javax.net.ssl.trustStore","C:\\FiddlerKeystore"); sysProperties.put("javax.net.ssl.trustStorePassword","1111111");
+		}
+			
 		//get request schicken... (loginpage)
 		String token = extract_token_value(establish_connection());
-
-		CookieHandler.setDefault(new CookieManager());
+		//CookieHandler.setDefault(new CookieManager());
 		String token_urlencoded = URLEncoder.encode(token, "UTF-8");
 		String postParams = "utf8=%E2%9C%93&authenticity_token="+token_urlencoded+"&login=bakkhos&password=1111111&commit=Los+geht's!";
-
 		sendPost(url,postParams,token);
 	}
 
